@@ -1,15 +1,25 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 
+
 const Login = () => {
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    console.log(email, password);
+
+   
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
           Login to Your Account
         </h2>
-        
-        <form className="space-y-5">
+
+        <form onSubmit={handleLogin} className="space-y-5">
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -17,6 +27,7 @@ const Login = () => {
             </label>
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
@@ -30,13 +41,12 @@ const Login = () => {
             </label>
             <input
               type="password"
+              name="password"
               placeholder="Enter your password"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
-
-    
 
           {/* Submit Button */}
           <button

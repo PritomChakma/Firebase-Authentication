@@ -1,7 +1,23 @@
-import React from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link } from "react-router-dom";
+import auth from "../Firebase/Firebase.init";
 
 const Register = () => {
+  const handleRegister = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+      console.log(email, password);
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
@@ -9,7 +25,7 @@ const Register = () => {
           Create an Account
         </h2>
 
-        <form className="space-y-5">
+        <form onSubmit={handleRegister} className="space-y-5">
           {/* Full Name */}
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -17,6 +33,7 @@ const Register = () => {
             </label>
             <input
               type="text"
+              name="name"
               placeholder="Enter your full name"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
@@ -30,6 +47,7 @@ const Register = () => {
             </label>
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
@@ -43,15 +61,12 @@ const Register = () => {
             </label>
             <input
               type="password"
+              name="password"
               placeholder="Create a password"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
-
-    
-
-         
 
           {/* Submit Button */}
           <button
