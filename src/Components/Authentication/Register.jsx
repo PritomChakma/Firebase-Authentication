@@ -1,8 +1,9 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import { FaEye, FaEyeSlash} from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import auth from "../Firebase/Firebase.init";
+import GoogleLogin from "../Shared/GoogleLogin";
 
 const Register = () => {
   const [sucessMessage, setSucessMessage] = useState(false);
@@ -77,10 +78,11 @@ const Register = () => {
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
-            <button onClick={()=>setShowPassword(!showPassword)} className="absolute right-9 bottom-3.5">
-             {
-              showPassword ? <FaEyeSlash />   :   <FaEye />
-             }
+            <button
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-9 bottom-3.5"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
 
@@ -105,14 +107,7 @@ const Register = () => {
         </div>
 
         {/* Google Register */}
-        <button className="w-full border flex items-center justify-center gap-2 py-2 rounded-lg hover:bg-gray-50 transition">
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            alt="Google"
-            className="w-5 h-5"
-          />
-          Sign Up with Google
-        </button>
+        <GoogleLogin></GoogleLogin>
 
         {/* Login Link */}
         <p className="text-center text-sm text-gray-600 mt-6">

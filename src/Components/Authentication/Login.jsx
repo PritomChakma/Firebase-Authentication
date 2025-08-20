@@ -1,19 +1,53 @@
-import { FaEye, FaEyeSlash} from "react-icons/fa";
-import { useState } from "react";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { useRef, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
+import auth from "../Firebase/Firebase.init";
+import GoogleLogin from "../Shared/GoogleLogin";
 
 const Login = () => {
-
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [sucessMessage, setSucessMessage] = useState(false);
+  const emailRef = useRef();
 
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password);
+    setErrorMessage("");
+    setSucessMessage(false);
 
-   
+    signInWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        setSucessMessage(true);
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setErrorMessage(error.message);
+      });
+  };
+
+  const handleForgetPassword = () => {
+    const email = emailRef.current.value;
+    console.log(email);
+    if (!email) {
+      console.log("Please verify your email");
+    } else {
+      sendPasswordResetEmail(auth, email);
+      alert("check email")
+        .then((result) => {
+          console.log(result.user);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
   };
 
   return (
@@ -32,30 +66,43 @@ const Login = () => {
             <input
               type="email"
               name="email"
+               ref={emailRef}
               placeholder="Enter your email"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
 
-           {/* Password */}
-                   <div className="relative">
-                     <label className="block text-sm font-medium text-gray-600 mb-1">
-                       Password
-                     </label>
-                     <input
-                       type={showPassword ? "text" : "password"}
-                       name="password"
-                       placeholder="Create a password"
-                       className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                       required
-                     />
-                     <button onClick={()=>setShowPassword(!showPassword)} className="absolute right-9 bottom-3.5">
-                      {
-                       showPassword ? <FaEyeSlash />   :   <FaEye />
-                      }
-                     </button>
-                   </div>
+          {/* Password */}
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Password
+            </label>
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Create a password"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+            <button
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-9 bottom-3.5"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={handleForgetPassword}
+             
+              className="link link-hover"
+            >
+              Forgot password?
+            </button>
+          </div>
+          {errorMessage && <p className="text-red-600">{errorMessage}</p>}
+          {sucessMessage && <p className="text-green-600">Login Sucessfully</p>}
 
           {/* Submit Button */}
           <button
@@ -74,14 +121,7 @@ const Login = () => {
         </div>
 
         {/* Social Login */}
-        <button className="w-full border flex items-center justify-center gap-2 py-2 rounded-lg hover:bg-gray-50 transition">
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            alt="Google"
-            className="w-5 h-5"
-          />
-          Continue with Google
-        </button>
+     <GoogleLogin></GoogleLogin>
 
         {/* Signup Link */}
         <p className="text-center text-sm text-gray-600 mt-6">
