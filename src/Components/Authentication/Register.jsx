@@ -1,20 +1,31 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
+import { FaEye, FaEyeSlash} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import auth from "../Firebase/Firebase.init";
 
 const Register = () => {
+  const [sucessMessage, setSucessMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleRegister = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-      console.log(email, password);
+    console.log(email, password);
 
+    setErrorMessage("");
+    setSucessMessage(false);
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
+        setSucessMessage(true);
       })
       .catch((error) => {
         console.log(error);
+        setErrorMessage(error.message);
+        setSucessMessage(false);
       });
   };
 
@@ -55,17 +66,22 @@ const Register = () => {
           </div>
 
           {/* Password */}
-          <div>
+          <div className="relative">
             <label className="block text-sm font-medium text-gray-600 mb-1">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Create a password"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
+            <button onClick={()=>setShowPassword(!showPassword)} className="absolute right-9 bottom-3.5">
+             {
+              showPassword ? <FaEyeSlash />   :   <FaEye />
+             }
+            </button>
           </div>
 
           {/* Submit Button */}
@@ -76,6 +92,10 @@ const Register = () => {
             Register
           </button>
         </form>
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+        {sucessMessage && (
+          <p className="text-green-500">Register SucessFully</p>
+        )}
 
         {/* Divider */}
         <div className="flex items-center my-6">

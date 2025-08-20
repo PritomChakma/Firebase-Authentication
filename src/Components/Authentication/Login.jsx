@@ -1,8 +1,12 @@
-
+import { FaEye, FaEyeSlash} from "react-icons/fa";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 
 const Login = () => {
+
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
@@ -34,19 +38,24 @@ const Login = () => {
             />
           </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            />
-          </div>
+           {/* Password */}
+                   <div className="relative">
+                     <label className="block text-sm font-medium text-gray-600 mb-1">
+                       Password
+                     </label>
+                     <input
+                       type={showPassword ? "text" : "password"}
+                       name="password"
+                       placeholder="Create a password"
+                       className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                       required
+                     />
+                     <button onClick={()=>setShowPassword(!showPassword)} className="absolute right-9 bottom-3.5">
+                      {
+                       showPassword ? <FaEyeSlash />   :   <FaEye />
+                      }
+                     </button>
+                   </div>
 
           {/* Submit Button */}
           <button
